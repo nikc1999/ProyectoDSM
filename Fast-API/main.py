@@ -12,3 +12,18 @@ class Categoria(BaseModel):
 
 
 app = FastAPI()
+
+lista_temp_categorias = []
+
+
+@app.get("/")
+def ruta_raiz():
+    return lista_temp_categorias
+
+@app.post("/crearCategoria")
+def crear_categoria(categoria : Categoria):
+    categoria.id = str(uuid())
+    print(categoria)
+    lista_temp_categorias.append(categoria)
+    return "ok"
+
