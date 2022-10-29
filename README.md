@@ -1,6 +1,11 @@
 # ProyectoDSM
 
 
+# Instalaciones en venv
+pip install fastapi
+pip install "uvicorn[standard]"
+
+
 
 # FastApi
 
