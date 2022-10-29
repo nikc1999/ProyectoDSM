@@ -21,9 +21,7 @@ def ruta_raiz():
     con = sqlite3.connect("avance2.db")  #conecta base de datos
     cur = con.cursor()                  #crea un cursor
     respuesta = cur.execute("SELECT * FROM Categoria")   #ejecuta query
-    print(respuesta)
     respuesta = respuesta.fetchall()   #transforma la respuesta a una lista con tuplas
-    print(respuesta)
     con.commit()                       #efectua cambios en base
     con.close() 
     return respuesta
@@ -31,14 +29,20 @@ def ruta_raiz():
 @app.post("/crearCategoria")
 def crear_categoria(categoria : Categoria):
     categoria.id = str(uuid())
-    #print(categoria)
-    #lista_temp_categorias.append(categoria)
-
-    #Base de datos
-    con = sqlite3.connect("avance2.db")  #conecta base de datos
-    cur = con.cursor()                  #crea un cursor
-    cur.execute(f"INSERT INTO Categoria VALUES('{categoria.id}','{categoria.nombre}')")                      #ejecuta query'
-    con.commit()                       #efectua cambios en base
-    con.close()                        # cierra conexion
+    con = sqlite3.connect("avance2.db")  
+    cur = con.cursor()   
+                   
+    try:  #intenta ejecutar la query
+        cur.execute(f"INSERT INTO Categoria VALUES('{categoria.id}','{categoria.nombre}')") 
+    except sqlite3.IntegrityError: #si el error es de integridad cierra conexion y retorna error de integridad
+        con.close()  #
+        return "Error de Integridad"
+        
+    except:  #para cualquier otro tipo de error se cierrac conexion y retorna error generico
+        con.close() 
+        return "Error"
+        
+    con.commit()                       
+    con.close()                        
     return "ok"
 
