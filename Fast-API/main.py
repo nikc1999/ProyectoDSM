@@ -18,12 +18,27 @@ lista_temp_categorias = []
 
 @app.get("/")
 def ruta_raiz():
-    return lista_temp_categorias
+    con = sqlite3.connect("avance2.db")  #conecta base de datos
+    cur = con.cursor()                  #crea un cursor
+    respuesta = cur.execute("SELECT * FROM Categoria")   #ejecuta query
+    print(respuesta)
+    respuesta = respuesta.fetchall()   #transforma la respuesta a una lista con tuplas
+    print(respuesta)
+    con.commit()                       #efectua cambios en base
+    con.close() 
+    return respuesta
 
 @app.post("/crearCategoria")
 def crear_categoria(categoria : Categoria):
     categoria.id = str(uuid())
-    print(categoria)
-    lista_temp_categorias.append(categoria)
+    #print(categoria)
+    #lista_temp_categorias.append(categoria)
+
+    #Base de datos
+    con = sqlite3.connect("avance2.db")  #conecta base de datos
+    cur = con.cursor()                  #crea un cursor
+    cur.execute(f"INSERT INTO Categoria VALUES('{categoria.id}','{categoria.nombre}')")                      #ejecuta query'
+    con.commit()                       #efectua cambios en base
+    con.close()                        # cierra conexion
     return "ok"
 
