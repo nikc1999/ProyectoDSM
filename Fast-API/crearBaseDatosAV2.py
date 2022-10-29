@@ -5,4 +5,5 @@ cur = con.cursor()
 
 
 # tablas
-cur.execute("CREATE TABLE pedido(id, totalPagar, mesaId, tiempoEspera)")
+cur.execute("CREATE TABLE Producto(CodProducto, Nombre, Precio, Cantidad, Descripcion)")
+cur.execute("CREATE TABLE Categoria(idCategoria, Nombre)")
