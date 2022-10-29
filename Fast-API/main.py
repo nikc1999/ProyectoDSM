@@ -1,10 +1,12 @@
-from fastapi import FastAPI #FastAPI
+from fastapi import FastAPI, Request #FastAPI , request 
 import sqlite3  #base de datos
 
 from pydantic import BaseModel #Creacion Modelos
 from typing import Text, Optional #Tipos de datos y extras para Modelos
 from uuid import uuid4 as uuid #Generar Id aleatorio Unico
 
+from fastapi.templating import Jinja2Templates  #template engine (muestra las vistas)
+from fastapi.responses import HTMLResponse 
 #Modelo Categoria
 class Categoria(BaseModel):
     id : Optional[str]  #id opcional ya que se le asigna desde la API
@@ -13,7 +15,8 @@ class Categoria(BaseModel):
 
 app = FastAPI()
 
-lista_temp_categorias = []
+
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
@@ -46,3 +49,12 @@ def crear_categoria(categoria : Categoria):
     con.close()                        
     return "ok"
 
+@app.get("/verCategoria", response_class=HTMLResponse)
+def test_template(request: Request):
+    con = sqlite3.connect("avance2.db")
+    cur = con.cursor()
+    categorias = cur.execute("SELECT Nombre FROM Categoria")
+    categorias = categorias.fetchall()
+    con.commit()
+    con.close()
+    return templates.TemplateResponse("test.html", {"request": request, "CategoriasUwU": categorias})
