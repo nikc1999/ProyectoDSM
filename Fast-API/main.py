@@ -58,3 +58,6 @@ def test_template(request: Request):
     con.commit()
     con.close()
     return templates.TemplateResponse("test.html", {"request": request, "CategoriasUwU": categorias})
+
+@app.delete("/categoria/{categoria_nombre}")
+def delete_category(categoria_nombre: str):

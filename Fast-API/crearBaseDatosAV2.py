@@ -1,6 +1,6 @@
 import sqlite3
 #=== Base de datos ===
-con = sqlite3.connect("avance2.db")
+con = sqlite3.connect("avance21p.db")
 cur = con.cursor()
 
 
