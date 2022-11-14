@@ -8,7 +8,7 @@ const CrearCategoria = () =>{
         <View style = {styles.container}>
             <Text style={styles.text}>Crear Categoria</Text>
             <TextInput placeholder="Ingrese el nombre de la categoria" style = {styles.input} value ={nombreCat} onChangeText = {(value) => setNombreCat(value)}/>
-            <Pressable style = {styles.button1} onPress = {() => deleteCategory(nombreCat)}>
+            <Pressable style = {styles.button1} onPress = {() => createCategory1(nombreCat)}>
                 <Text>Confirmar</Text>
             </Pressable>
         </View>
@@ -46,13 +46,13 @@ const styles = StyleSheet.create({
 
 let createCategory1 = (name) =>{
 
-    fetch('http://192.168.1.163:8000/crearCategoria', {
+    fetch('http://192.168.1.13:8000/crearCategoria', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "nombre" : name })
+        "nombre": name })
     })
     .then(res => {
       console.log(res.status);
