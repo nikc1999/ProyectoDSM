@@ -132,7 +132,7 @@ def editar_categoria(editarCategoria : EditarCategoria):
     try:  #intenta ejecutar la query
         cur.execute(f"UPDATE Categoria SET Nombre='{editarCategoria.nuevoNombre}' WHERE Nombre='{editarCategoria.nombreActualCategoria}';") 
         
-    except:  #para cualquier otro tipo de error se cierrac conexion y retorna error generico
+    except:  #para cualquier otro tipo de error se cierrac conexion y retorna error generico 
         con.close() 
         return "Error"
         
