@@ -8,7 +8,7 @@ import Inicio from './views/Inicio';
 import MenuCliente from './views/MenuCliente';
 import MenuAdministrador from './views/MenuAdministrador';
 import CrearCategoria from './functions/CrearCategoria';
-
+import EditarCategoria from './functions/EditarCategoria';
 const stack = createNativeStackNavigator();
 function App () {
         return(
@@ -26,6 +26,10 @@ function App () {
                                 <stack.Screen
                                         name = 'CrearCategoria'
                                         component={CrearCategoria}
+                                />
+                                <stack.Screen
+                                        name = 'EditarCategoria'
+                                        component={EditarCategoria}
                                 />
                         </stack.Navigator>
 

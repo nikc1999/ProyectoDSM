@@ -1,15 +1,21 @@
 import React, {useState} from 'react'
 import { View,StyleSheet,TextInput,Button,Text, Pressable } from 'react-native'
-
+import { useNavigation } from '@react-navigation/native';
 const CrearCategoria = () =>{
     let [nombreCat, setNombreCat] = useState("");
-
+    const navegation = useNavigation();
     return(
         <View style = {styles.container}>
-            <Text style={styles.text}>Crear Categoria</Text>
+            <Text style={styles.text}>CRUD Categoria</Text>
             <TextInput placeholder="Ingrese el nombre de la categoria" style = {styles.input} value ={nombreCat} onChangeText = {(value) => setNombreCat(value)}/>
             <Pressable style = {styles.button1} onPress = {() => createCategory1(nombreCat)}>
-                <Text>Confirmar</Text>
+                <Text style = {styles.text1}>Agregar</Text>
+            </Pressable>
+            <Pressable style = {styles.button2} value ={nombreCat} onChangeText = {(value) => setNombreCat(value)} onPress = {() => deleteCategory(nombreCat)}>
+              <Text style = {styles.text1}>Eliminar</Text>
+            </Pressable>
+            <Pressable style = {styles.button3} onPress = {() => navegation.navigate('EditarCategoria')}>
+              <Text>Editar</Text>
             </Pressable>
         </View>
     )
@@ -40,13 +46,38 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: '#1A5276',
       },
+      button2:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        borderWidth: 1,
+        elevation: 3,
+        backgroundColor: '#C70039',
+        marginTop: 10,
+      },
+      button3:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        borderWidth: 1,
+        elevation: 3,
+        backgroundColor: '#229954',
+        marginTop: 10,
+      },
+      text1:{
+        color:'#FFFFFF'
+      }
 
 
 });
 
 let createCategory1 = (name) =>{
 
-    fetch('http://192.168.1.13:8000/crearCategoria', {
+    fetch('http://192.168.1.163:8000/crearCategoria', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -71,7 +102,7 @@ let createCategory1 = (name) =>{
 
   let deleteCategory = (name) =>{
 
-    fetch(`http://192.168.1.163:8000/eliminarCategoria/${name}`, {
+    fetch(`http://192.168.1.163:8000/eliminarCategoria`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -112,4 +143,5 @@ let createCategory1 = (name) =>{
         console.error(error);
     }
  }
+
 export default CrearCategoria;
