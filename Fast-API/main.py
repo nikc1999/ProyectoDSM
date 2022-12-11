@@ -27,6 +27,7 @@ class Producto(BaseModel):
     precio : int
     stock : int
     descripcion : str
+    categoria: str
 
 app = FastAPI()
 
@@ -51,7 +52,7 @@ def crear_categoria(categoria : Categoria):
     cur = con.cursor()   
     print(categoria.nombre)                
     try:  #intenta ejecutar la query
-        cur.execute(f"INSERT INTO Categoria VALUES('{categoria.id}','{categoria.nombre}')") 
+        cur.execute(f"INSERT INTO Categoria VALUES('{categoria.nombre}')") 
     except sqlite3.IntegrityError: #si el error es de integridad cierra conexion y retorna error de integridad
         con.close()  #
         return "Error de Integridad"
@@ -161,10 +162,11 @@ def editar_categoria(editarCategoria : EditarCategoria):
 def crear_categoria(producto : Producto):
     producto.id = str(uuid())
     con = sqlite3.connect("avance2.db")  
+    con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()   
     print(producto.nombre)                
     try:  #intenta ejecutar la query
-        cur.execute(f"INSERT INTO Producto VALUES('{producto.id}','{producto.nombre}','{producto.precio}','{producto.stock}','{producto.descripcion}')") 
+        cur.execute(f"INSERT INTO Producto VALUES('{producto.id}','{producto.nombre}','{producto.precio}','{producto.stock}','{producto.descripcion}','{producto.categoria}')") 
     except sqlite3.IntegrityError: #si el error es de integridad cierra conexion y retorna error de integridad
         con.close()  #
         return "Error de Integridad"
