@@ -21,6 +21,13 @@ class EditarCategoria(BaseModel):
     nombreActualCategoria : str
     nuevoNombre : str
 
+class Producto(BaseModel):
+    id : Optional[str]
+    nombre : str
+    precio : int
+    stock : int
+    descripcion : str
+
 app = FastAPI()
 
 
@@ -140,3 +147,52 @@ def editar_categoria(editarCategoria : EditarCategoria):
     con.close()  
     print(f'nuevo nombre: {editarCategoria.nuevoNombre}')                   
     return "ok"
+
+
+# COSAS POR HACER
+# edit category OK
+# hacer el agregarProducto API sin fotos
+# hacer el getProductos API para recivirlo
+# Crear Producto en la app y que se guarde el producto sin fotos
+# 
+# Compra cliente: PIKER DE PRODUCTOS
+
+@app.post("/crearProducto")
+def crear_categoria(producto : Producto):
+    producto.id = str(uuid())
+    con = sqlite3.connect("avance2.db")  
+    cur = con.cursor()   
+    print(producto.nombre)                
+    try:  #intenta ejecutar la query
+        cur.execute(f"INSERT INTO Producto VALUES('{producto.id}','{producto.nombre}','{producto.precio}','{producto.stock}','{producto.descripcion}')") 
+    except sqlite3.IntegrityError: #si el error es de integridad cierra conexion y retorna error de integridad
+        con.close()  #
+        return "Error de Integridad"
+        
+    except:  #para cualquier otro tipo de error se cierrac conexion y retorna error generico
+        con.close() 
+        return "Error"
+        
+    con.commit()                       
+    con.close()                        
+    return "ok"
+
+@app.get("/getProducto")
+def get_categoria():
+    con = sqlite3.connect("avance2.db")
+    cur = con.cursor()
+    productos = cur.execute("SELECT Nombre FROM Producto")
+    productos = productos.fetchall()
+    con.commit()
+    con.close()
+    
+    #categorias = json.dumps(categorias)
+    
+    
+    productosFixed = []
+    for producto in productos:
+        productosFixed.append(producto[0])
+    
+
+    print(productosFixed)
+    return productosFixed
