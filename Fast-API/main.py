@@ -183,17 +183,18 @@ def crear_categoria(producto : Producto):
 def get_categoria():
     con = sqlite3.connect("avance2.db")
     cur = con.cursor()
-    productos = cur.execute("SELECT Nombre FROM Producto")
+    productos = cur.execute("SELECT Nombre, Precio,Categoria FROM Producto")
     productos = productos.fetchall()
     con.commit()
     con.close()
     
     #categorias = json.dumps(categorias)
     
-    
+    print(productos)
     productosFixed = []
     for producto in productos:
-        productosFixed.append(producto[0])
+        listaTemp = [producto[0],producto[1],producto[2]]
+        productosFixed.append(listaTemp)
     
 
     print(productosFixed)
