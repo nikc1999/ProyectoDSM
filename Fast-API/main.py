@@ -29,6 +29,10 @@ class Producto(BaseModel):
     descripcion : str
     categoria: str
 
+class Mesa(BaseModel):
+    id: str
+
+
 app = FastAPI()
 
 
@@ -199,3 +203,46 @@ def get_categoria():
 
     print(productosFixed)
     return productosFixed
+
+
+
+
+#mesas
+@app.post("/crearMesa")
+def crear_categoria(mesa : Mesa):
+    con = sqlite3.connect("avance2.db")  
+    cur = con.cursor()   
+                  
+    try:  #intenta ejecutar la query
+        cur.execute(f"INSERT INTO Mesa VALUES('{mesa.id}')") 
+    except sqlite3.IntegrityError: #si el error es de integridad cierra conexion y retorna error de integridad
+        con.close()  #
+        return "Error de Integridad"
+        
+    except:  #para cualquier otro tipo de error se cierrac conexion y retorna error generico
+        con.close() 
+        return "Error"
+        
+    con.commit()                       
+    con.close()                        
+    return "ok"
+
+@app.get("/getMesa")
+def get_categoria():
+    con = sqlite3.connect("avance2.db")
+    cur = con.cursor()
+    mesas = cur.execute("SELECT idMesa FROM Mesa")
+    mesas = mesas.fetchall()
+    con.commit()
+    con.close()
+    
+    #categorias = json.dumps(categorias)
+    
+    print(mesas)
+    mesasFixed = []
+    for mesa in mesas:
+        mesasFixed.append(mesa[0])
+    
+
+    print(mesasFixed)
+    return mesasFixed

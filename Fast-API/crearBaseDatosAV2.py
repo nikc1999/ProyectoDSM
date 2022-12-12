@@ -8,6 +8,8 @@ cur = con.cursor()
 # tablas
 cur.execute("CREATE TABLE Categoria(Nombre TEXT PRIMARY KEY)")
 cur.execute("CREATE TABLE Producto(CodProducto TEXT PRIMARY KEY, Nombre TEXT, Precio INTEGER, Stock INTEGER, Descripcion TEXT,Categoria NOT NULL, FOREIGN KEY(Categoria) REFERENCES Categoria(Nombre))")
+cur.execute("CREATE TABLE Mesa(idMesa TEXT PRIMARY KEY)")
+
 con.commit()                       
 con.close() 
 print(sqlite3.sqlite_version)
