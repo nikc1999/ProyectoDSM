@@ -32,6 +32,14 @@ class Producto(BaseModel):
 class Mesa(BaseModel):
     id: str
 
+class Pedido(BaseModel):
+    id : Optional[str]
+    totalPagar: int
+    horaEstimada: Optional[str]
+    mesa: str
+    idProducto: str
+    nombreProducto: str
+    cantidadProducto: int
 
 app = FastAPI()
 
@@ -187,7 +195,7 @@ def crear_categoria(producto : Producto):
 def get_categoria():
     con = sqlite3.connect("avance2.db")
     cur = con.cursor()
-    productos = cur.execute("SELECT Nombre, Precio,Categoria FROM Producto")
+    productos = cur.execute("SELECT Nombre,CodProducto, Precio,Categoria FROM Producto")
     productos = productos.fetchall()
     con.commit()
     con.close()
@@ -246,3 +254,46 @@ def get_categoria():
 
     print(mesasFixed)
     return mesasFixed
+
+@app.post("/crearPedido")
+def crear_categoria(pedido : Pedido):
+    pedido.id = str(uuid())
+    pedido.horaEstimada = ""
+    con = sqlite3.connect("avance2.db")  
+    con.execute("PRAGMA foreign_keys = 1")
+    cur = con.cursor()                 
+    try:  #intenta ejecutar la query
+        cur.execute(f"INSERT INTO Pedido VALUES('{pedido.id}','{pedido.totalPagar}','{pedido.horaEstimada}','{pedido.mesa}','{pedido.idProducto}','{pedido.nombreProducto}','{pedido.cantidadProducto}')") 
+    except sqlite3.IntegrityError: #si el error es de integridad cierra conexion y retorna error de integridad
+        con.close()  #
+        return "Error de Integridad"
+        
+    except:  #para cualquier otro tipo de error se cierrac conexion y retorna error generico
+        con.close() 
+        return "Error"
+        
+    con.commit()                       
+    con.close()                        
+    return "ok"
+
+@app.get("/getPedido")
+def get_categoria():
+    con = sqlite3.connect("avance2.db")
+    cur = con.cursor()
+    pedidos = cur.execute("SELECT idPedido,TotalPagar,HoraEstimada,Mesa,NombreProducto,CantidadProducto FROM Mesa")
+    pedidos = pedidos.fetchall()
+    con.commit()
+    con.close()
+    
+    #categorias = json.dumps(categorias)
+    
+    print(pedidos)
+    pedidosFixed = []
+    for pedido in pedidos:
+        listaTemp = [pedido[0],pedido[1],pedido[2],pedido[3],pedido[4],pedido[5]]
+        pedidosFixed.append(listaTemp)
+    
+    
+
+    print(pedidosFixed)
+    return pedidosFixed
