@@ -13,4 +13,4 @@ cur.execute("CREATE TABLE Pedido(idPedido TEXT PRIMARY KEY, TotalPagar INTEGER,H
 
 con.commit()                       
 con.close() 
-print(sqlite3.sqlite_version)
+#print(sqlite3.sqlite_version)

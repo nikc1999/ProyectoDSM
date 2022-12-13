@@ -10,36 +10,7 @@ from fastapi.responses import HTMLResponse
 
 import json  #para responder en json
 
-#Modelo Categoria
-class Categoria(BaseModel):
-    id : Optional[str]  #id opcional ya que se le asigna desde la API
-    nombre : str
-
-
-
-class EditarCategoria(BaseModel):
-    nombreActualCategoria : str
-    nuevoNombre : str
-
-class Producto(BaseModel):
-    id : Optional[str]
-    nombre : str
-    precio : int
-    stock : int
-    descripcion : str
-    categoria: str
-
-class Mesa(BaseModel):
-    id: str
-
-class Pedido(BaseModel):
-    id : Optional[str]
-    totalPagar: int
-    horaEstimada: Optional[str]
-    mesa: str
-    idProducto: str
-    nombreProducto: str
-    cantidadProducto: int
+import Modelos
 
 app = FastAPI()
 
@@ -58,7 +29,7 @@ def ruta_raiz():
     return respuesta
 
 @app.post("/crearCategoria")
-def crear_categoria(categoria : Categoria):
+def crear_categoria(categoria : Modelos.Categoria):
     categoria.id = str(uuid())
     con = sqlite3.connect("avance2.db")  
     cur = con.cursor()   
@@ -109,27 +80,9 @@ def get_categoria():
     print(categoriasFixed)
     return categoriasFixed
 
-"""
-@app.get("/getCategoriaJson")
-def ver_categoria_json():
-    con = sqlite3.connect("avance2.db")
-    cur = con.cursor()
-    categorias = cur.execute("SELECT Nombre FROM Categoria")
-    categorias = categorias.fetchall()
-    con.commit()
-    con.close()
-    print(categorias)
-    categorias = json.dumps(categorias)
-    print(categorias)
-    return templates.TemplateResponse("test.html", {"request": request, "CategoriasUwU": categorias})
 
-
-
-@app.delete("/categoria/{categoria_nombre}")
-def delete_category(categoria_nombre: str):
-"""
 @app.delete("/eliminarCategoria")
-def eliminar_categoria(categoria: Categoria):
+def eliminar_categoria(categoria: Modelos.Categoria):
     con = sqlite3.connect("avance2.db")  
     cur = con.cursor()   
     print(f'categoria a eliminar: {categoria.nombre}')                
@@ -145,7 +98,7 @@ def eliminar_categoria(categoria: Categoria):
     return "ok"
 
 @app.post("/editarCategoria")
-def editar_categoria(editarCategoria : EditarCategoria):
+def editar_categoria(editarCategoria : Modelos.EditarCategoria):
     con = sqlite3.connect("avance2.db")  
     cur = con.cursor()   
     print(f'categoria a editar: {editarCategoria.nombreActualCategoria}')                
@@ -162,16 +115,10 @@ def editar_categoria(editarCategoria : EditarCategoria):
     return "ok"
 
 
-# COSAS POR HACER
-# edit category OK
-# hacer el agregarProducto API sin fotos
-# hacer el getProductos API para recivirlo
-# Crear Producto en la app y que se guarde el producto sin fotos
-# 
-# Compra cliente: PIKER DE PRODUCTOS
+
 
 @app.post("/crearProducto")
-def crear_categoria(producto : Producto):
+def crear_categoria(producto : Modelos.Producto):
     producto.id = str(uuid())
     con = sqlite3.connect("avance2.db")  
     con.execute("PRAGMA foreign_keys = 1")
@@ -217,7 +164,7 @@ def get_categoria():
 
 #mesas
 @app.post("/crearMesa")
-def crear_categoria(mesa : Mesa):
+def crear_categoria(mesa : Modelos.Mesa):
     con = sqlite3.connect("avance2.db")  
     cur = con.cursor()   
                   
@@ -256,7 +203,7 @@ def get_categoria():
     return mesasFixed
 
 @app.post("/crearPedido")
-def crear_categoria(pedido : Pedido):
+def crear_categoria(pedido : Modelos.Pedido):
     pedido.id = str(uuid())
     pedido.horaEstimada = ""
     con = sqlite3.connect("avance2.db")  
