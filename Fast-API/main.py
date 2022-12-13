@@ -20,7 +20,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 def ruta_raiz():
-    con = sqlite3.connect("avance2.db")  #conecta base de datos
+    con = sqlite3.connect("BaseDatos.db")  #conecta base de datos
     cur = con.cursor()                  #crea un cursor
     respuesta = cur.execute("SELECT * FROM Categoria")   #ejecuta query
     respuesta = respuesta.fetchall()   #transforma la respuesta a una lista con tuplas
@@ -31,7 +31,7 @@ def ruta_raiz():
 @app.post("/crearCategoria")
 def crear_categoria(categoria : Modelos.Categoria):
     categoria.id = str(uuid())
-    con = sqlite3.connect("avance2.db")  
+    con = sqlite3.connect("BaseDatos.db")  
     cur = con.cursor()   
     print(categoria.nombre)                
     try:  #intenta ejecutar la query
@@ -50,7 +50,7 @@ def crear_categoria(categoria : Modelos.Categoria):
 
 @app.get("/verCategoria", response_class=HTMLResponse)
 def ver_categoria(request: Request):
-    con = sqlite3.connect("avance2.db")
+    con = sqlite3.connect("BaseDatos.db")
     cur = con.cursor()
     categorias = cur.execute("SELECT Nombre FROM Categoria")
     categorias = categorias.fetchall()
@@ -62,7 +62,7 @@ def ver_categoria(request: Request):
 
 @app.get("/getCategoria")
 def get_categoria():
-    con = sqlite3.connect("avance2.db")
+    con = sqlite3.connect("BaseDatos.db")
     cur = con.cursor()
     categorias = cur.execute("SELECT Nombre FROM Categoria")
     categorias = categorias.fetchall()
@@ -83,7 +83,7 @@ def get_categoria():
 
 @app.delete("/eliminarCategoria")
 def eliminar_categoria(categoria: Modelos.Categoria):
-    con = sqlite3.connect("avance2.db")  
+    con = sqlite3.connect("BaseDatos.db")  
     cur = con.cursor()   
     print(f'categoria a eliminar: {categoria.nombre}')                
     try:  #intenta ejecutar la query
@@ -99,7 +99,7 @@ def eliminar_categoria(categoria: Modelos.Categoria):
 
 @app.post("/editarCategoria")
 def editar_categoria(editarCategoria : Modelos.EditarCategoria):
-    con = sqlite3.connect("avance2.db")  
+    con = sqlite3.connect("BaseDatos.db")  
     cur = con.cursor()   
     print(f'categoria a editar: {editarCategoria.nombreActualCategoria}')                
     try:  #intenta ejecutar la query
@@ -120,7 +120,7 @@ def editar_categoria(editarCategoria : Modelos.EditarCategoria):
 @app.post("/crearProducto")
 def crear_categoria(producto : Modelos.Producto):
     producto.id = str(uuid())
-    con = sqlite3.connect("avance2.db")  
+    con = sqlite3.connect("BaseDatos.db")  
     con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()   
     print(producto.nombre)                
@@ -140,7 +140,7 @@ def crear_categoria(producto : Modelos.Producto):
 
 @app.get("/getProducto")
 def get_categoria():
-    con = sqlite3.connect("avance2.db")
+    con = sqlite3.connect("BaseDatos.db")
     cur = con.cursor()
     productos = cur.execute("SELECT Nombre,CodProducto, Precio,Categoria FROM Producto")
     productos = productos.fetchall()
@@ -165,7 +165,7 @@ def get_categoria():
 #mesas
 @app.post("/crearMesa")
 def crear_categoria(mesa : Modelos.Mesa):
-    con = sqlite3.connect("avance2.db")  
+    con = sqlite3.connect("BaseDatos.db")  
     cur = con.cursor()   
                   
     try:  #intenta ejecutar la query
@@ -184,7 +184,7 @@ def crear_categoria(mesa : Modelos.Mesa):
 
 @app.get("/getMesa")
 def get_categoria():
-    con = sqlite3.connect("avance2.db")
+    con = sqlite3.connect("BaseDatos.db")
     cur = con.cursor()
     mesas = cur.execute("SELECT idMesa FROM Mesa")
     mesas = mesas.fetchall()
@@ -206,7 +206,7 @@ def get_categoria():
 def crear_categoria(pedido : Modelos.Pedido):
     pedido.id = str(uuid())
     pedido.horaEstimada = ""
-    con = sqlite3.connect("avance2.db")  
+    con = sqlite3.connect("BaseDatos.db")  
     con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()                 
     try:  #intenta ejecutar la query
@@ -225,7 +225,7 @@ def crear_categoria(pedido : Modelos.Pedido):
 
 @app.get("/getPedido")
 def get_categoria():
-    con = sqlite3.connect("avance2.db")
+    con = sqlite3.connect("BaseDatos.db")
     cur = con.cursor()
     pedidos = cur.execute("SELECT idPedido,TotalPagar,HoraEstimada,Mesa,NombreProducto,CantidadProducto FROM Mesa")
     pedidos = pedidos.fetchall()

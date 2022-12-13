@@ -1,6 +1,6 @@
 import sqlite3
 #=== Base de datos ===
-con = sqlite3.connect("avance2.db")
+con = sqlite3.connect("BaseDatos.db")
 con.execute("PRAGMA foreign_keys = 1")
 cur = con.cursor()
 
