@@ -48,17 +48,17 @@ def crear_categoria(categoria : Modelos.Categoria):
     con.close()                        
     return "ok"
 
-@app.get("/verCategoria", response_class=HTMLResponse)
+@app.get("/verPedido", response_class=HTMLResponse)
 def ver_categoria(request: Request):
     con = sqlite3.connect("BaseDatos.db")
     cur = con.cursor()
-    categorias = cur.execute("SELECT Nombre FROM Categoria")
-    categorias = categorias.fetchall()
+    pedidos = cur.execute("SELECT idPedido,TotalPagar,HoraEstimada,NombreProducto,CantidadProducto FROM Pedido")
+    pedidos = categorias.fetchall()
     con.commit()
     con.close()
     print(categorias)
-    categorias
-    return templates.TemplateResponse("test.html", {"request": request, "CategoriasUwU": categorias})
+    
+    return templates.TemplateResponse("test.html", {"request": request, "pedidosUwU": pedidos})
 
 @app.get("/getCategoria")
 def get_categoria():
@@ -227,7 +227,7 @@ def crear_categoria(pedido : Modelos.Pedido):
 def get_categoria():
     con = sqlite3.connect("BaseDatos.db")
     cur = con.cursor()
-    pedidos = cur.execute("SELECT idPedido,TotalPagar,HoraEstimada,Mesa,NombreProducto,CantidadProducto FROM Mesa")
+    pedidos = cur.execute("SELECT idPedido,TotalPagar,HoraEstimada,Mesa,NombreProducto,CantidadProducto FROM Pedido")
     pedidos = pedidos.fetchall()
     con.commit()
     con.close()
