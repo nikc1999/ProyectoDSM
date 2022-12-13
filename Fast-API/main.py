@@ -53,10 +53,10 @@ def ver_categoria(request: Request):
     con = sqlite3.connect("BaseDatos.db")
     cur = con.cursor()
     pedidos = cur.execute("SELECT idPedido,TotalPagar,HoraEstimada,NombreProducto,CantidadProducto FROM Pedido")
-    pedidos = categorias.fetchall()
+    pedidos = pedidos.fetchall()
     con.commit()
     con.close()
-    print(categorias)
+    print(pedidos)
     
     return templates.TemplateResponse("test.html", {"request": request, "pedidosUwU": pedidos})
 
